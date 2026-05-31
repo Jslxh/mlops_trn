@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kookie's Calci — Premium Elegant Calculator</title>
+    <meta name="description" content="Kookie's Calci is a modern, elegant, and professional web calculator with a premium dark purple theme. Built for high legibility and precision calculations.">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts (Outfit & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Premium Dark Purple Theme Palette */
+            --bg-radial-start: #1c0e35;
+            --bg-radial-end: #090311;
+            --card-bg: rgba(22, 11, 35, 0.9);
+            --card-border: rgba(147, 51, 234, 0.2);
+            
+            --display-bg: rgba(11, 4, 18, 0.7);
+            --display-border: rgba(147, 51, 234, 0.15);
+            
+            --btn-number-bg: rgba(35, 17, 56, 0.45);
+            --btn-number-border: rgba(139, 92, 246, 0.15);
+            --btn-number-color: #f3e8ff;
+            --btn-number-hover: rgba(139, 92, 246, 0.12);
+            
+            --btn-op-bg: rgba(109, 40, 217, 0.25);
+            --btn-op-border: rgba(139, 92, 246, 0.25);
+            --btn-op-color: #c084fc;
+            --btn-op-hover: rgba(109, 40, 217, 0.45);
+            
+            --btn-special-bg: rgba(139, 92, 246, 0.1);
+            --btn-special-border: rgba(139, 92, 246, 0.2);
+            --btn-special-color: #e9d5ff;
+            --btn-special-hover: rgba(139, 92, 246, 0.22);
+            
+            --btn-equal-bg: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            --btn-equal-border: rgba(167, 139, 250, 0.3);
+            --btn-equal-color: #ffffff;
+            --btn-equal-hover: linear-gradient(135deg, #a78bfa, #7c3aed);
+            
+            --text-primary: #f5f3ff;
+            --text-muted: rgba(245, 243, 255, 0.55);
+            
+            --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, var(--bg-radial-start) 0%, var(--bg-radial-end) 100%);
+            font-family: var(--font-display);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 370px;
+            padding: 28px;
+            border-radius: 28px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: 
+                0 24px 60px rgba(0, 0, 0, 0.65),
+                0 0 30px rgba(139, 92, 246, 0.08),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: #e9d5ff;
+            font-size: 21px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding-bottom: 4px;
+        }
+
+        .header i {
+            color: #a78bfa;
+            font-size: 18px;
+        }
+
+        .display {
+            background: var(--display-bg);
+            border-radius: 20px;
+            padding: 22px;
+            border: 1px solid var(--display-border);
+            box-shadow: 
+                inset 0 4px 12px rgba(0, 0, 0, 0.4),
+                0 0 10px rgba(139, 92, 246, 0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 110px;
+            gap: 8px;
+        }
+
+        .equation {
+            color: var(--text-muted);
+            font-size: 14px;
+            text-align: right;
+            font-family: var(--font-mono);
+            letter-spacing: 0.5px;
+            min-height: 20px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .display input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 38px;
+            font-weight: 400;
+            text-align: right;
+            outline: none;
+            font-family: var(--font-display);
+            letter-spacing: 0.5px;
+            padding: 0;
+        }
+
+        .display input::placeholder {
+            color: rgba(245, 243, 255, 0.2);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            height: 60px;
+            border: none;
+            border-radius: 16px;
+            font-size: 20px;
+            font-family: var(--font-display);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-primary);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        button:active {
+            transform: scale(0.92);
+            opacity: 0.85;
+        }
+
+        /* Number buttons styling */
+        .number {
+            background: var(--btn-number-bg);
+            border: 1px solid var(--btn-number-border);
+            color: var(--btn-number-color);
+        }
+
+        .number:hover {
+            background: var(--btn-number-hover);
+            border-color: rgba(139, 92, 246, 0.35);
+        }
+
+        /* Operator buttons styling */
+        .operator {
+            background: var(--btn-op-bg);
+            border: 1px solid var(--btn-op-border);
+            color: var(--btn-op-color);
+            font-weight: 600;
+        }
+
+        .operator:hover {
+            background: var(--btn-op-hover);
+            border-color: rgba(139, 92, 246, 0.45);
+            color: #e9d5ff;
+        }
+
+        /* Special actions (Clear, Delete) */
+        .clear, .delete {
+            background: var(--btn-special-bg);
+            border: 1px solid var(--btn-special-border);
+            color: var(--btn-special-color);
+        }
+
+        .clear:hover, .delete:hover {
+            background: var(--btn-special-hover);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #ffffff;
+        }
+
+        /* Equal button */
+        .equal {
+            background: var(--btn-equal-bg);
+            border: 1px solid var(--btn-equal-border);
+            color: var(--btn-equal-color);
+            font-weight: 600;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .equal:hover {
+            background: var(--btn-equal-hover);
+            box-shadow: 
+                0 6px 16px rgba(124, 58, 237, 0.45),
+                0 0 15px rgba(139, 92, 246, 0.2);
+            border-color: rgba(196, 181, 253, 0.4);
+        }
+
+        .zero-btn {
+            grid-column: span 2;
+        }
+
+        /* Footer styling */
+        footer {
+            width: 100%;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            opacity: 0.7;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .footer i {
+            color: #a78bfa;
+            margin-right: 2px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 400px) {
+            .container {
+                max-width: 100%;
+                padding: 20px;
+                border-radius: 24px;
+                gap: 16px;
+            }
+
+            button {
+                height: 56px;
+                border-radius: 14px;
+                font-size: 18px;
+            }
+            
+            .display input {
+                font-size: 32px;
+            }
+            
+            .display {
+                padding: 16px;
+                min-height: 95px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="container" id="calculator-app">
+        <header>
+            <h1 class="header">
+                <i class="fas fa-calculator" aria-hidden="true"></i>
+                Kookie's Calci
+            </h1>
+        </header>
+
+        <div class="display">
+            <div class="equation" id="equation"></div>
+            <input type="text" id="display" placeholder="0" readonly aria-label="Calculator display">
+        </div>
+
+        <div class="buttons">
+            <!-- Row 1 -->
+            <button class="clear" id="btn-clear" title="Clear all">AC</button>
+            <button class="delete" id="btn-delete" title="Delete last">⌫</button>
+            <button class="operator" id="btn-percent" data-operator="%" title="Percent">%</button>
+            <button class="operator" id="btn-divide" data-operator="/" title="Divide">÷</button>
+
+            <!-- Row 2 -->
+            <button class="number" id="btn-7" data-number="7">7</button>
+            <button class="number" id="btn-8" data-number="8">8</button>
+            <button class="number" id="btn-9" data-number="9">9</button>
+            <button class="operator" id="btn-multiply" data-operator="*" title="Multiply">×</button>
+
+            <!-- Row 3 -->
+            <button class="number" id="btn-4" data-number="4">4</button>
+            <button class="number" id="btn-5" data-number="5">5</button>
+            <button class="number" id="btn-6" data-number="6">6</button>
+            <button class="operator" id="btn-subtract" data-operator="-" title="Subtract">−</button>
+
+            <!-- Row 4 -->
+            <button class="number" id="btn-1" data-number="1">1</button>
+            <button class="number" id="btn-2" data-number="2">2</button>
+            <button class="number" id="btn-3" data-number="3">3</button>
+            <button class="operator" id="btn-add" data-operator="+" title="Add">+</button>
+
+            <!-- Row 5 -->
+            <button class="number zero-btn" id="btn-0" data-number="0">0</button>
+            <button class="operator" id="btn-decimal" data-operator="." title="Decimal">.</button>
+            <button class="equal" id="btn-equals" title="Calculate">=</button>
+        </div>
+
+        <footer class="footer">
+            <p><i class="fas fa-star" aria-hidden="true"></i> Kookie's Calci v1.0</p>
+        </footer>
+    </main>
+
+    <script>
+        const display = document.getElementById('display');
+        const equationDisplay = document.getElementById('equation');
+        let currentValue = '';
+        let previousValue = '';
+        let operation = null;
+        let shouldResetDisplay = false;
+
+        // Get all buttons
+        const numberButtons = document.querySelectorAll('.number');
+        const operatorButtons = document.querySelectorAll('.operator');
+        const equalButton = document.querySelector('.equal');
+        const clearButton = document.querySelector('.clear');
+        const deleteButton = document.querySelector('.delete');
+
+        // Number button click handlers
+        numberButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const number = button.dataset.number;
+                
+                if (shouldResetDisplay) {
+                    currentValue = number;
+                    shouldResetDisplay = false;
+                } else {
+                    currentValue += number;
+                }
+                updateDisplay();
+            });
+        });
+
+        // Operator button click handlers
+        operatorButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const op = button.dataset.operator;
+
+                // Handle decimal point
+                if (op === '.') {
+                    if (shouldResetDisplay) {
+                        currentValue = '0.';
+                        shouldResetDisplay = false;
+                    } else if (!currentValue.includes('.')) {
+                        currentValue = currentValue === '' ? '0.' : currentValue + '.';
+                    }
+                    updateDisplay();
+                } else {
+                    // Handle percentage
+                    if (op === '%') {
+                        if (currentValue) {
+                            currentValue = (parseFloat(currentValue) / 100).toString();
+                            updateDisplay();
+                        }
+                    } else {
+                        // Handle basic operators
+                        if (currentValue !== '') {
+                            if (previousValue !== '' && operation) {
+                                calculate();
+                            }
+                            previousValue = currentValue;
+                            operation = op;
+                            shouldResetDisplay = true;
+                            updateDisplay();
+                        }
+                    }
+                }
+            });
+        });
+
+        // Equal button click handler
+        equalButton.addEventListener('click', () => {
+            if (operation && currentValue !== '' && previousValue !== '') {
+                calculate();
+            }
+        });
+
+        // Clear button click handler
+        clearButton.addEventListener('click', () => {
+            currentValue = '';
+            previousValue = '';
+            operation = null;
+            shouldResetDisplay = false;
+            updateDisplay();
+        });
+
+        // Delete button click handler
+        deleteButton.addEventListener('click', () => {
+            currentValue = currentValue.toString().slice(0, -1);
+            updateDisplay();
+        });
+
+        // Calculate function
+        function calculate() {
+            if (!operation || currentValue === '' || previousValue === '') return;
+
+            let result;
+            const prev = parseFloat(previousValue);
+            const current = parseFloat(currentValue);
+
+            switch (operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = current !== 0 ? prev / current : 0;
+                    break;
+                default:
+                    return;
+            }
+
+            // Round calculations to prevent JS floating point precision issues (e.g. 0.1 + 0.2)
+            result = Math.round(result * 100000000) / 100000000;
+
+            currentValue = result.toString();
+            previousValue = '';
+            operation = null;
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+
+        // Get operator symbol for display
+        function getOperatorSymbol(op) {
+            const symbols = {
+                '+': '+',
+                '-': '−',
+                '*': '×',
+                '/': '÷'
+            };
+            return symbols[op] || op;
+        }
+
+        // Update display
+        function updateDisplay() {
+            display.value = currentValue || '0';
+            
+            // Update equation display
+            if (operation && previousValue) {
+                equationDisplay.textContent = previousValue + ' ' + getOperatorSymbol(operation) + ' ' + (shouldResetDisplay ? '' : currentValue);
+            } else if (previousValue) {
+                equationDisplay.textContent = previousValue;
+            } else {
+                equationDisplay.textContent = '';
+            }
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if ((e.key >= '0' && e.key <= '9') || e.key === '.') {
+                if (e.key === '.' && currentValue.includes('.')) {
+                    return;
+                }
+                if (shouldResetDisplay) {
+                    currentValue = e.key === '.' ? '0.' : e.key;
+                    shouldResetDisplay = false;
+                } else {
+                    if (e.key === '.' && currentValue === '') {
+                        currentValue = '0.';
+                    } else {
+                        currentValue += e.key;
+                    }
+                }
+                updateDisplay();
+            } else if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+                if (currentValue !== '') {
+                    if (previousValue !== '' && operation) {
+                        calculate();
+                    }
+                    previousValue = currentValue;
+                    operation = e.key;
+                    shouldResetDisplay = true;
+                    updateDisplay();
+                }
+            } else if (e.key === '%') {
+                e.preventDefault();
+                if (currentValue) {
+                    currentValue = (parseFloat(currentValue) / 100).toString();
+                    updateDisplay();
+                }
+            } else if (e.key === 'Enter' || e.key === '=') {
+                e.preventDefault();
+                if (operation && currentValue !== '' && previousValue !== '') {
+                    calculate();
+                }
+            } else if (e.key === 'Backspace') {
+                e.preventDefault();
+                currentValue = currentValue.toString().slice(0, -1);
+                updateDisplay();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                currentValue = '';
+                previousValue = '';
+                operation = null;
+                shouldResetDisplay = false;
+                updateDisplay();
+            }
+        });
+
+        // Initial display update
+        updateDisplay();
+    </script>
+</body>
+</html>
